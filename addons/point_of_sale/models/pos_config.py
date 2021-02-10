@@ -243,13 +243,21 @@ class PosConfig(models.Model):
         for pos_config in self:
             pos_config.is_installed_account_accountant = account_accountant and account_accountant.id
 
+    '''
     @api.depends('journal_id.currency_id', 'journal_id.company_id.currency_id', 'company_id', 'company_id.currency_id')
     def _compute_currency(self):
         for pos_config in self:
+
             if pos_config.journal_id:
                 pos_config.currency_id = pos_config.journal_id.currency_id.id or pos_config.journal_id.company_id.currency_id.id
             else:
                 pos_config.currency_id = pos_config.company_id.currency_id.id
+            '''
+            
+    def _compute_currency(self):
+        for pos_config in self:
+            foreign_currency = self.env['res.currency'].search([('name', '=', 'MXN'), ('active', '=', True)])
+            pos_config.currency_id = foreign_currency.id
 
     @api.depends('session_ids', 'session_ids.state')
     def _compute_current_session(self):
