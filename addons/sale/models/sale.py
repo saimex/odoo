@@ -1340,7 +1340,12 @@ class SaleOrderLine(models.Model):
     name = fields.Text(string='Description', required=True)
     sequence = fields.Integer(string='Sequence', default=10)
 
-    invoice_lines = fields.Many2many('account.move.line', 'sale_order_line_invoice_rel', 'order_line_id', 'invoice_line_id', string='Invoice Lines', copy=False)
+    invoice_lines = fields.Many2many(
+        'account.move.line', 
+        'sale_order_line_invoice_rel', 
+        'order_line_id', 'invoice_line_id', 
+        string='Invoice Lines', 
+        copy=False)
     invoice_status = fields.Selection([
         ('upselling', 'Upselling Opportunity'),
         ('invoiced', 'Fully Invoiced'),
